@@ -96,3 +96,31 @@ svg {
   margin: 0 auto;
 }
 .stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 28px;
+  flex: 1;
+  min-height: 0;
+  background: #e5ebd7;
+  box-shadow:
+    0 1px 0 1px #4b623b0f,
+    inset 0 0 0 1px #fff5;
+  container-type: size;
+}
+.stage canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  outline: none;
+}
+.stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  border: 1px solid #4c633d12;
+}
+.start-screen {
