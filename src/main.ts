@@ -67,3 +67,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 `
 
 const canvas = element<HTMLCanvasElement>('game'),
+  ctx = canvas.getContext('2d', { alpha: false })!
+const stage = element('stage'),
+  sound = new Sound()
+type Mode =
