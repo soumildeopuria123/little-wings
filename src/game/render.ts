@@ -363,3 +363,61 @@ function hills(
 }
 
 function pipe(
+  c: CanvasRenderingContext2D,
+  x: number,
+  edge: number,
+  top: boolean,
+) {
+  const w = PIPE_WIDTH - 10,
+    start = top ? -25 : edge,
+    end = top ? edge : FLOOR + 10
+  const grad = c.createLinearGradient(x - w / 2, 0, x + w / 2, 0)
+  grad.addColorStop(0, '#668754')
+  grad.addColorStop(0.2, '#9eb975')
+  grad.addColorStop(0.38, '#abc47e')
+  grad.addColorStop(0.75, '#83a263')
+  grad.addColorStop(1, '#5c7e50')
+  c.fillStyle = '#567249'
+  round(c, x - w / 2 - 1.5, start, w + 3, end - start, 7)
+  c.fill()
+  c.fillStyle = grad
+  round(c, x - w / 2, start, w, end - start, 6)
+  c.fill()
+  c.fillStyle = '#d0dda2'
+  c.globalAlpha = 0.35
+  round(c, x - w / 2 + 9, start + 4, 4, end - start - 8, 2)
+  c.fill()
+  c.globalAlpha = 1
+  const capY = top ? edge - 27 : edge
+  c.fillStyle = '#58764b'
+  round(c, x - PIPE_WIDTH / 2, capY, PIPE_WIDTH, 28, 8)
+  c.fill()
+  c.fillStyle = grad
+  round(c, x - PIPE_WIDTH / 2 + 1.5, capY + 1.5, PIPE_WIDTH - 3, 24, 7)
+  c.fill()
+  c.fillStyle = '#c5d69b'
+  round(c, x - PIPE_WIDTH / 2 + 5, capY + 3, PIPE_WIDTH - 10, 3, 2)
+  c.fill()
+  c.fillStyle = '#4d7046'
+  c.globalAlpha = 0.35
+  round(c, x - PIPE_WIDTH / 2 + 4, capY + 22, PIPE_WIDTH - 8, 3, 2)
+  c.fill()
+  c.globalAlpha = 1
+  // Tiny climbing leaf: restrained detail, away from the collision edge.
+  if (!top) {
+    c.strokeStyle = '#52784a'
+    c.lineWidth = 1.5
+    c.beginPath()
+    c.moveTo(x + 31, edge + 87)
+    c.quadraticCurveTo(x + 38, edge + 64, x + 47, edge + 66)
+    c.stroke()
+    c.fillStyle = '#789753'
+    c.beginPath()
+    c.moveTo(x + 37, edge + 76)
+    c.quadraticCurveTo(x + 31, edge + 54, x + 51, edge + 60)
+    c.quadraticCurveTo(x + 52, edge + 73, x + 37, edge + 76)
+    c.fill()
+  }
+}
+
+export function render(
