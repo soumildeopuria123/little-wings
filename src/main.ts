@@ -17,3 +17,6 @@ const icons = {
   play: '<path d="m8 4 12 8-12 8V4Z"/>',
 }
 function icon(name: keyof typeof icons) {
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]}</svg>`
+}
+function element<T extends HTMLElement>(id: string) {
