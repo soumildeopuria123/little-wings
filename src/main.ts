@@ -71,3 +71,13 @@ const canvas = element<HTMLCanvasElement>('game'),
 const stage = element('stage'),
   sound = new Sound()
 type Mode =
+  | 'idle'
+  | 'starting'
+  | 'playing'
+  | 'paused'
+  | 'countdown'
+  | 'dying'
+  | 'over'
+let mode: Mode = 'idle',
+  flight: Flight = createFlight(10)
+let best = Math.max(0, Number(readLocal('little-wings-best')) || 0)
