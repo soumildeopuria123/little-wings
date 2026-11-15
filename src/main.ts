@@ -212,3 +212,85 @@ function finish() {
 }
 
 let previousY = flight.y,
+  previousDistance = flight.distance
+let lastPaint = 0
+function frame(now: number) {
+  const delta = lastFrame ? Math.min((now - lastFrame) / 1000, 0.08) : 0
+  lastFrame = now
+  elapsed += delta
+  if (mode === 'countdown') {
+    const remaining = 3 - Math.floor(elapsed - countdownAt)
+    if (remaining <= 0) {
+      mode = 'playing'
+      accumulator = 0
+      element('countdown').hidden = true
+    } else element('countdown').textContent = String(remaining)
+  }
+  if (mode === 'playing') {
+    accumulator += delta
+    while (accumulator >= STEP && flight.alive) {
+      const score = flight.score
+      previousY = flight.y
+      previousDistance = flight.distance
+      step(flight)
+      accumulator -= STEP
+      if (flight.score !== score) {
+        element('score').textContent = String(flight.score)
+        pointPop = 1
+        sound.play('point')
+        if (isMilestone(flight.score) && !celebrated.has(flight.score)) {
+          celebrated.add(flight.score)
+          milestone = { score: flight.score, age: 0 }
+        }
+      }
+    }
+    if (!flight.alive) {
+      mode = 'dying'
+      deathAt = elapsed
+      impact = 1
+      sound.play('hit')
+      accumulator = 0
+    }
+  }
+  if (mode === 'dying' && elapsed - deathAt > 0.42) finish()
+  if (mode === 'playing' || mode === 'dying') {
+    for (const p of particles) {
+      p.x += p.vx * delta
+      p.y += p.vy * delta
+      p.life -= delta * 1.8
+    }
+    particles = particles.filter((p) => p.life > 0)
+  }
+  impact = Math.max(0, impact - delta * 3)
+  pointPop = Math.max(0, pointPop - delta * 5)
+  if (milestone && mode === 'playing') milestone.age += delta
+  element('score').style.transform = `scale(${1 + pointPop * 0.12})`
+  // A quiet idle scene needs fewer paints; active input stays at display refresh.
+  if (
+    width > 0 &&
+    height > 0 &&
+    (mode === 'playing' || mode === 'dying' || now - lastPaint > 32)
+  ) {
+    const drawFlight =
+      mode === 'playing'
+        ? {
+            ...flight,
+            y: previousY + ((flight.y - previousY) * accumulator) / STEP,
+            distance:
+              previousDistance +
+              ((flight.distance - previousDistance) * accumulator) / STEP,
+          }
+        : flight
+    render(ctx, width, height, {
+      flight: drawFlight,
+      time: reducedMotion && mode === 'idle' ? 0 : elapsed,
+      idle: mode === 'idle' || mode === 'starting',
+      dead: mode === 'dying' || mode === 'over',
+      particles,
+      impact,
+      milestone: mode === 'playing' ? milestone : null,
+      still: reducedMotion,
+    })
+    lastPaint = now
+  }
+  requestAnimationFrame(frame)
