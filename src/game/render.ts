@@ -164,3 +164,27 @@ function drawCritter(c: CanvasRenderingContext2D, kind: number, time: number) {
 }
 
 function drawSign(c: CanvasRenderingContext2D, score: number, time: number) {
+  c.save()
+  c.translate(19, -29 + Math.sin(time * 5.5) * 1.2)
+  c.strokeStyle = '#c9b98f'
+  c.lineWidth = 1.3
+  c.beginPath()
+  c.moveTo(-7, 8)
+  c.lineTo(-1, 17)
+  c.stroke()
+  c.fillStyle = '#fdfaf0'
+  round(c, 0, 0, 30, 19, 7)
+  c.fill()
+  c.strokeStyle = '#ded7bd'
+  c.lineWidth = 1
+  round(c, 0.5, 0.5, 29, 18, 6.5)
+  c.stroke()
+  c.fillStyle = '#c9714f'
+  c.font = '600 12px "Fraunces Variable", Georgia, serif'
+  c.textAlign = 'center'
+  c.textBaseline = 'middle'
+  c.fillText(String(score), 15, 10)
+  c.restore()
+}
+
+function confetti(c: CanvasRenderingContext2D, age: number) {
