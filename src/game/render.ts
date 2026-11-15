@@ -231,3 +231,74 @@ function drawMilestone(
 }
 
 export function drawBird(
+  c: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  angle: number,
+  time: number,
+  scale = 1,
+  dead = false,
+) {
+  c.save()
+  c.translate(x, y)
+  c.rotate(angle)
+  c.scale(scale, scale)
+  // Three small tail feathers, rounded silhouette and a warm belly.
+  c.fillStyle = '#ad4e3e'
+  c.beginPath()
+  c.moveTo(-16, -3)
+  c.quadraticCurveTo(-37, -13, -30, -1)
+  c.lineTo(-21, 12)
+  c.lineTo(-10, 10)
+  c.fill()
+  const body = c.createLinearGradient(-12, -19, 15, 18)
+  body.addColorStop(0, '#f4936c')
+  body.addColorStop(1, '#d5654f')
+  ellipse(c, 0, 0, 24, 19, body)
+  ellipse(c, 8, 8, 14, 10, '#ffe6b7')
+  c.fillStyle = '#e8b05a'
+  c.beginPath()
+  c.moveTo(20, 0)
+  c.quadraticCurveTo(38, 5, 25, 10)
+  c.lineTo(18, 9)
+  c.fill()
+  c.strokeStyle = '#cc9140'
+  c.lineWidth = 1.2
+  c.beginPath()
+  c.moveTo(23, 5)
+  c.lineTo(31, 5)
+  c.stroke()
+  c.save()
+  c.translate(-8, 4)
+  c.rotate(-0.3 + Math.sin(time * 24) * (dead ? 0 : 0.5))
+  ellipse(c, -3, 3, 11, 6, '#bf5645')
+  c.strokeStyle = '#e48564'
+  c.beginPath()
+  c.ellipse(-4, 1, 8, 4, 0.1, 3.2, 5.8)
+  c.stroke()
+  c.restore()
+  ellipse(c, 12, -6, 4.6, 5.4, '#fff6de')
+  if (dead) {
+    c.strokeStyle = '#343f34'
+    c.lineWidth = 1.8
+    c.beginPath()
+    c.moveTo(10, -8)
+    c.lineTo(14, -4)
+    c.moveTo(14, -8)
+    c.lineTo(10, -4)
+    c.stroke()
+  } else {
+    ellipse(c, 13.4, -5.5, 2.5, 3.4, '#303e32')
+    ellipse(c, 14.3, -7, 0.8, 1, '#fffdf2')
+  }
+  c.strokeStyle = '#f9b48b'
+  c.lineWidth = 2
+  c.lineCap = 'round'
+  c.beginPath()
+  c.moveTo(-4, -15)
+  c.quadraticCurveTo(2, -18, 6, -15)
+  c.stroke()
+  c.restore()
+}
+
+function cloud(
