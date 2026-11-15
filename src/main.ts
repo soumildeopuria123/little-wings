@@ -190,3 +190,25 @@ function resume() {
   canvas.focus({ preventScroll: true })
 }
 function finish() {
+  mode = 'over'
+  stage.classList.remove('in-flight')
+  element('hud').hidden = true
+  const record = flight.score > best
+  best = Math.max(best, flight.score)
+  writeLocal('little-wings-best', String(best))
+  element('best').textContent = String(best)
+  element('result-best').textContent = String(best)
+  element('result-score').textContent = String(flight.score)
+  element('result-eyebrow').textContent = record
+    ? 'A new best'
+    : flight.score === 0
+      ? 'Another little try?'
+      : 'Nice flight'
+  element('announcement').textContent =
+    `Flight finished. Score ${flight.score}. Personal best ${best}.`
+  element('result-screen').hidden = false
+  element('again').focus({ preventScroll: true })
+  milestone = null
+}
+
+let previousY = flight.y,
