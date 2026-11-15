@@ -173,3 +173,20 @@ function doFlap() {
       })
 }
 function pause() {
+  if (mode !== 'playing' && mode !== 'countdown') return
+  mode = 'paused'
+  accumulator = 0
+  element('pause-screen').hidden = false
+  element('countdown').hidden = true
+  element('resume').focus({ preventScroll: true })
+}
+function resume() {
+  if (mode !== 'paused') return
+  element('pause-screen').hidden = true
+  element('countdown').hidden = false
+  mode = 'countdown'
+  countdownAt = elapsed
+  element('countdown').textContent = '3'
+  canvas.focus({ preventScroll: true })
+}
+function finish() {
