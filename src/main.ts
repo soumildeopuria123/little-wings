@@ -133,3 +133,30 @@ new ResizeObserver(resize).observe(stage)
 resize()
 
 function start() {
+  if (!['idle', 'over'].includes(mode)) return
+  mode = 'starting'
+  sound.unlock()
+  element<HTMLButtonElement>('start').disabled = true
+  element<HTMLButtonElement>('again').disabled = true
+  const seed = crypto.getRandomValues(new Uint32Array(1))[0]
+  flight = createFlight(seed)
+  previousY = flight.y
+  previousDistance = flight.distance
+  particles = []
+  milestone = null
+  celebrated.clear()
+  accumulator = 0
+  impact = 0
+  element('score').textContent = '0'
+  element('hud').hidden = false
+  element('start-screen').hidden = true
+  element('result-screen').hidden = true
+  element<HTMLButtonElement>('start').disabled = false
+  element<HTMLButtonElement>('again').disabled = false
+  stage.classList.add('in-flight')
+  canvas.focus({ preventScroll: true })
+  mode = 'playing'
+  doFlap()
+  if (document.hidden || !document.hasFocus()) pause()
+}
+function doFlap() {
