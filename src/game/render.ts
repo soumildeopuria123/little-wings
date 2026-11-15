@@ -302,3 +302,27 @@ export function drawBird(
 }
 
 function cloud(
+  c: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  opacity: number,
+) {
+  c.save()
+  c.translate(x, y)
+  c.scale(size, size)
+  c.globalAlpha = opacity
+  c.fillStyle = '#fffcf0'
+  c.beginPath()
+  c.moveTo(-50, 14)
+  c.bezierCurveTo(-65, 13, -62, -10, -40, -12)
+  c.bezierCurveTo(-39, -42, 4, -45, 14, -20)
+  c.bezierCurveTo(35, -26, 50, -7, 43, 3)
+  c.bezierCurveTo(66, 0, 68, 22, 45, 22)
+  c.lineTo(-42, 22)
+  c.quadraticCurveTo(-54, 21, -50, 14)
+  c.fill()
+  c.restore()
+}
+
+function hills(
