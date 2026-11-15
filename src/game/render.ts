@@ -188,3 +188,46 @@ function drawSign(c: CanvasRenderingContext2D, score: number, time: number) {
 }
 
 function confetti(c: CanvasRenderingContext2D, age: number) {
+  const p = Math.min(1, age / 0.9)
+  if (p >= 1) return
+  const colors = ['#d5654f', '#8faf7a', '#e8b05a', '#fbf6ea']
+  c.save()
+  for (let i = 0; i < 7; i++) {
+    const angle = -0.35 - (i / 6) * 2.1
+    const radius = 24 * easeOut(p)
+    c.globalAlpha = c.globalAlpha * (1 - p)
+    ellipse(
+      c,
+      2 + Math.cos(angle) * radius,
+      -16 + Math.sin(angle) * radius - p * 4,
+      1.6,
+      2.2,
+      colors[i % colors.length],
+    )
+  }
+  c.restore()
+}
+
+function drawMilestone(
+  c: CanvasRenderingContext2D,
+  milestone: Milestone,
+  still: boolean,
+) {
+  const up = milestoneLift(milestone.age)
+  const fade =
+    Math.min(1, milestone.age / 0.18) *
+    Math.min(1, Math.max(0, (LIFE - milestone.age) / 0.3))
+  if (up <= 0 || fade <= 0) return
+  c.save()
+  c.globalAlpha = fade
+  // Anchored in the ground band: the bird never flies there, so nothing that
+  // matters for collision is hidden.
+  c.translate(34, FLOOR + 44 + (1 - up) * 42)
+  const time = still ? 0 : milestone.age
+  drawCritter(c, Math.floor(milestone.score / 50) % CRITTERS, time)
+  drawSign(c, milestone.score, time)
+  if (!still) confetti(c, milestone.age)
+  c.restore()
+}
+
+export function drawBird(
