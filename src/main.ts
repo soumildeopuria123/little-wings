@@ -160,3 +160,16 @@ function start() {
   if (document.hidden || !document.hasFocus()) pause()
 }
 function doFlap() {
+  if (mode !== 'playing' || !flap(flight)) return
+  sound.play('flap')
+  if (!reducedMotion)
+    for (let i = 0; i < 3; i++)
+      particles.push({
+        x: flight.distance - 21,
+        y: flight.y + 3,
+        life: 0.7,
+        vx: -30 - Math.random() * 25,
+        vy: (Math.random() - 0.5) * 50,
+      })
+}
+function pause() {
