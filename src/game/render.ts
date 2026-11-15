@@ -421,3 +421,143 @@ function pipe(
 }
 
 export function render(
+  c: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  scene: Scene,
+) {
+  const scale = height / HEIGHT,
+    w = width / scale
+  c.save()
+  c.scale(scale, scale)
+  const { flight, time, idle } = scene
+  const travel = idle ? time * 19 : flight.distance
+  const birdX = idle ? w * 0.5 : Math.min(w * 0.3, 350)
+  const sky = c.createLinearGradient(0, 0, 0, HEIGHT)
+  sky.addColorStop(0, '#edecda')
+  sky.addColorStop(0.55, '#e5ebd7')
+  sky.addColorStop(1, '#c5d9bc')
+  c.fillStyle = sky
+  c.fillRect(0, 0, w, HEIGHT)
+  const sunX = w * 0.78,
+    sunY = 115
+  const halo = c.createRadialGradient(sunX, sunY, 10, sunX, sunY, 150)
+  halo.addColorStop(0, '#fff6cfbb')
+  halo.addColorStop(1, '#fff4ce00')
+  c.fillStyle = halo
+  c.fillRect(sunX - 150, sunY - 150, 300, 300)
+  ellipse(c, sunX, sunY, 38, 38, '#fff8db')
+  for (let i = 0; i < 7; i++) {
+    const x =
+      ((((i * 287 + 80 - travel * 0.15) % (w + 300)) + w + 300) % (w + 300)) -
+      150
+    cloud(c, x, 100 + ((i * 61) % 170), 0.65 + (i % 3) * 0.3, 0.65)
+  }
+  // A few distant migrating birds.
+  c.strokeStyle = '#879985'
+  c.lineWidth = 1.4
+  c.globalAlpha = 0.6
+  for (let i = 0; i < 3; i++) {
+    const x = w * 0.65 + i * 19 - travel * 0.025,
+      y = 225 + (i % 2) * 9
+    c.beginPath()
+    c.moveTo(x - 4, y + 2)
+    c.quadraticCurveTo(x - 2, y - 2, x, y)
+    c.quadraticCurveTo(x + 2, y - 2, x + 5, y + 1)
+    c.stroke()
+  }
+  c.globalAlpha = 1
+  hills(c, w, travel * 0.12, 478, '#c1d2b5', 620, 160)
+  hills(c, w, travel * 0.23 + 170, 530, '#a6c09e', 470, 128)
+  hills(c, w, travel * 0.38 + 80, 571, '#87ad8a', 350, 100)
+  // Soft tree line and scattered foliage.
+  for (let i = 0; i < Math.ceil(w / 82) + 3; i++) {
+    const x = i * 82 - ((travel * 0.55) % 82),
+      h = 23 + ((i + Math.floor((travel * 0.55) / 82)) % 3) * 15
+    c.fillStyle = '#749f7c'
+    c.beginPath()
+    c.moveTo(x, 570)
+    c.lineTo(x + 16, 570 - h)
+    c.lineTo(x + 32, 570)
+    c.fill()
+  }
+  if (idle) {
+    const x = w < 650 ? w + 10 : w * 0.84
+    pipe(c, x, 223, true)
+    pipe(c, x, 430, false)
+    if (w > 850) {
+      pipe(c, w * 0.12 - 15, 110, true)
+      pipe(c, w * 0.12 - 15, 393, false)
+    }
+  } else {
+    for (const p of flight.pipes) {
+      const x = birdX + p.x - flight.distance
+      if (x < -70 || x > w + 70) continue
+      pipe(c, x, p.center - p.gap / 2, true)
+      pipe(c, x, p.center + p.gap / 2, false)
+    }
+  }
+  // Ground never moves vertically; parallax is drawn inside the same canvas.
+  c.fillStyle = '#6f9060'
+  c.fillRect(0, FLOOR, w, 56)
+  c.fillStyle = '#a9b77b'
+  c.fillRect(0, FLOOR + 3, w, 8)
+  c.fillStyle = '#ddd7ad'
+  c.fillRect(0, FLOOR + 11, w, 45)
+  c.fillStyle = '#cbc69c'
+  c.fillRect(0, FLOOR + 13, w, 3)
+  for (let i = 0; i < w / 30 + 2; i++) {
+    const x = i * 30 - (travel % 30)
+    c.fillStyle = '#ebe4bd'
+    round(
+      c,
+      x,
+      FLOOR + 26 + ((i + Math.floor(travel / 30)) % 2) * 11,
+      10,
+      3,
+      1.5,
+    )
+    c.fill()
+  }
+  for (let i = 0; i < w / 78 + 2; i++) {
+    const x = i * 78 - (travel % 78)
+    c.strokeStyle = '#739458'
+    c.lineWidth = 2
+    c.beginPath()
+    c.moveTo(x, FLOOR + 2)
+    c.lineTo(x - 3, FLOOR - 4)
+    c.moveTo(x, FLOOR + 2)
+    c.lineTo(x + 4, FLOOR - 6)
+    c.stroke()
+    if ((i + Math.floor(travel / 78)) % 3 === 1) {
+      ellipse(c, x + 13, FLOOR - 3, 2.5, 2.5, '#f5e4af')
+    }
+  }
+  if (!idle) {
+    for (const p of scene.particles) {
+      c.globalAlpha = Math.max(0, p.life)
+      ellipse(
+        c,
+        birdX + p.x - flight.distance,
+        p.y,
+        2.8 * p.life,
+        2.8 * p.life,
+        '#fff2ce',
+      )
+    }
+    c.globalAlpha = 1
+  }
+  if (!idle && scene.milestone)
+    drawMilestone(c, scene.milestone, scene.still)
+  const y = idle ? 324 + Math.sin(time * 2.8) * 9 : flight.y
+  ellipse(c, birdX, FLOOR + 5, 23, 4, '#46673c22')
+  const angle = idle
+    ? -0.08
+    : Math.max(-0.4, Math.min(1.3, flight.velocity / 550))
+  drawBird(c, birdX, y, angle, time, idle ? 1.8 : 1, scene.dead)
+  if (scene.impact > 0) {
+    c.fillStyle = `rgba(255,248,222,${scene.impact * 0.3})`
+    c.fillRect(0, 0, w, HEIGHT)
+  }
+  c.restore()
+}
