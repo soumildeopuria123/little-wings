@@ -416,3 +416,157 @@ svg {
   border: 0;
 }
 @keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (min-width: 1600px) {
+  .header {
+    height: 108px;
+    min-height: 108px;
+  }
+  .footer {
+    height: 80px;
+    min-height: 80px;
+  }
+  .game-shell {
+    max-height: 900px;
+  }
+}
+@media (max-width: 650px) {
+  #app {
+    padding: 0 12px max(4px, env(safe-area-inset-bottom));
+  }
+  .header {
+    height: 72px;
+    min-height: 72px;
+    padding: 0 5px;
+  }
+  .brand {
+    font-size: 16px;
+    gap: 4px;
+  }
+  .brand img {
+    width: 31px;
+    height: 31px;
+  }
+  .stage {
+    border-radius: 22px;
+  }
+  .footer {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 5px;
+  }
+  .footer-note {
+    font-size: 12px;
+  }
+  .start-screen h1 {
+    top: 25%;
+    font-size: clamp(44px, 13cqw, 72px);
+    letter-spacing: -3.5px;
+  }
+  .start-actions {
+    top: 64%;
+    gap: 17px;
+  }
+  .primary {
+    min-height: 51px;
+    padding: 0 25px;
+  }
+  .score {
+    font-size: 60px;
+  }
+  .stage-button {
+    top: 16px;
+    right: 16px;
+  }
+  .result-card {
+    width: min(300px, calc(100% - 44px));
+    padding: 27px;
+  }
+  .pause-card {
+    width: min(320px, calc(100% - 36px));
+  }
+  .pause-card h2 {
+    font-size: 28px;
+  }
+}
+@media (max-width: 370px) {
+  .brand span {
+    display: none;
+  }
+  .footer-note {
+    display: none;
+  }
+}
+@media (max-height: 520px) and (min-width: 600px) {
+  #app {
+    padding: 0 16px 0;
+  }
+  .header {
+    height: 54px;
+    min-height: 54px;
+  }
+  .footer {
+    height: 40px;
+    min-height: 40px;
+  }
+  .start-screen h1 {
+    top: 17%;
+    font-size: 55px;
+    letter-spacing: -3px;
+  }
+  .start-actions {
+    top: 65%;
+    gap: 10px;
+  }
+  .start-actions .primary {
+    min-height: 40px;
+    font-size: 13px;
+  }
+  .key-hint {
+    font-size: 10px;
+  }
+  .result-card {
+    padding: 17px;
+    width: 270px;
+  }
+  .result-card h2 {
+    font-size: 54px;
+    margin: 8px 0;
+  }
+  .result-best {
+    margin-bottom: 15px;
+  }
+  .result-card .primary {
+    min-height: 40px;
+  }
+  .score {
+    font-size: 46px;
+  }
+  .stage {
+    border-radius: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
