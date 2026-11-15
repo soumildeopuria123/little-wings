@@ -98,3 +98,22 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 sound.enabled = readLocal('little-wings-sound') === 'on'
 element('best').textContent = String(best)
 function toast(message: string) {
+  const node = element('toast')
+  node.textContent = message
+  node.hidden = false
+  clearTimeout(toastTimer)
+  toastTimer = window.setTimeout(() => {
+    node.hidden = true
+  }, 4000)
+}
+function updateSound() {
+  element('sound').innerHTML = icon(sound.enabled ? 'sound' : 'mute')
+  element('sound').setAttribute(
+    'aria-label',
+    sound.enabled ? 'Turn sound off' : 'Turn sound on',
+  )
+  element('sound').setAttribute('aria-pressed', String(sound.enabled))
+}
+updateSound()
+// Milestones are rare early taps, then every fifty pipes once past a hundred.
+function isMilestone(score: number) {
