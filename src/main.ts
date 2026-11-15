@@ -117,3 +117,7 @@ function updateSound() {
 updateSound()
 // Milestones are rare early taps, then every fifty pipes once past a hundred.
 function isMilestone(score: number) {
+  return score === 25 || score === 50 || (score >= 100 && score % 50 === 0)
+}
+
+function resize() {
