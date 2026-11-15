@@ -306,3 +306,76 @@ svg {
   height: 17px;
 }
 .scrim {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #e6ebd636;
+  backdrop-filter: blur(6px);
+  animation: fade-in 0.24s ease-out;
+}
+.result-card,
+.pause-card {
+  background: #fcfaefed;
+  box-shadow:
+    0 20px 80px #2943321f,
+    0 2px 5px #29433209;
+  border: 1px solid #fff9;
+  border-radius: 30px;
+  width: 310px;
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.result-card {
+  animation: arrive 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.eyebrow {
+  font-size: 14px;
+  color: #73806a;
+  font-weight: 500;
+}
+.result-card h2 {
+  font-family: 'Fraunces Variable', serif;
+  font-size: 86px;
+  line-height: 1;
+  margin: 15px 0 12px;
+  font-weight: 650;
+  letter-spacing: -5px;
+  font-variant-numeric: tabular-nums;
+}
+.result-best {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #7c866b;
+  font-size: 12px;
+  margin-bottom: 29px;
+}
+.result-best svg {
+  width: 16px;
+  height: 16px;
+}
+.result-best strong {
+  font-weight: 600;
+  margin-left: 5px;
+  color: #53664d;
+}
+.result-card .primary {
+  width: 100%;
+}
+.pause-card {
+  width: 340px;
+  padding: 34px;
+  gap: 26px;
+}
+.pause-card h2 {
+  font-family: 'Fraunces Variable', serif;
+  font-size: 30px;
+  font-weight: 550;
+  letter-spacing: -1px;
+  margin: 0;
+}
+.countdown {
