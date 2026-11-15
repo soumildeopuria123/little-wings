@@ -21,3 +21,36 @@ export type Flight = {
 }
 
 export function createFlight(seed: number): Flight {
+  const flight: Flight = {
+    y: 290,
+    velocity: 0,
+    distance: 0,
+    tick: 0,
+    score: 0,
+    alive: true,
+    pipes: [],
+    random: seed >>> 0,
+    lastFlap: -MIN_FLAP_TICKS,
+    nextPipe: 480,
+  }
+  for (let i = 0; i < 7; i++) addPipe(flight)
+  return flight
+}
+
+function addPipe(flight: Flight) {
+  flight.random = (Math.imul(1664525, flight.random) + 1013904223) >>> 0
+  const previous = flight.pipes.at(-1)?.center ?? 300
+  const center = Math.max(
+    172,
+    Math.min(416, previous + (flight.random / 4294967296 - 0.5) * 170),
+  )
+  flight.pipes.push({
+    x: flight.nextPipe,
+    center,
+    gap: Math.max(176, 198 - flight.score * 0.55),
+    passed: false,
+  })
+  flight.nextPipe += 282
+}
+
+export function flap(flight: Flight): boolean {
