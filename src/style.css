@@ -379,3 +379,40 @@ svg {
   margin: 0;
 }
 .countdown {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fffbed;
+  font-family: 'Fraunces Variable', serif;
+  font-size: 110px;
+  text-shadow: 0 3px 20px #344e3e33;
+  pointer-events: none;
+}
+.toast {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  width: max-content;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: #fcfaeff2;
+  color: #50624d;
+  font-size: 12px;
+  box-shadow: 0 4px 20px #344e3e12;
+  text-align: center;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@keyframes arrive {
