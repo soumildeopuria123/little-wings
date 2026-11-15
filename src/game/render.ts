@@ -326,3 +326,40 @@ function cloud(
 }
 
 function hills(
+  c: CanvasRenderingContext2D,
+  width: number,
+  offset: number,
+  y: number,
+  color: string,
+  period: number,
+  height: number,
+) {
+  c.fillStyle = color
+  c.beginPath()
+  c.moveTo(-period, HEIGHT)
+  const start = -(offset % period) - period
+  c.lineTo(start, y)
+  for (let x = start; x < width + period; x += period) {
+    c.bezierCurveTo(
+      x + period * 0.2,
+      y,
+      x + period * 0.22,
+      y - height,
+      x + period * 0.5,
+      y - height,
+    )
+    c.bezierCurveTo(
+      x + period * 0.78,
+      y - height,
+      x + period * 0.8,
+      y,
+      x + period,
+      y,
+    )
+  }
+  c.lineTo(width + period, HEIGHT)
+  c.closePath()
+  c.fill()
+}
+
+function pipe(
