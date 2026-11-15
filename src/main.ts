@@ -294,3 +294,59 @@ function frame(now: number) {
     lastPaint = now
   }
   requestAnimationFrame(frame)
+}
+requestAnimationFrame(frame)
+
+element('start').onclick = start
+element('again').onclick = start
+element('pause').onclick = pause
+element('resume').onclick = resume
+element('sound').onclick = () => {
+  sound.enabled = !sound.enabled
+  writeLocal('little-wings-sound', sound.enabled ? 'on' : 'off')
+  sound.unlock()
+  updateSound()
+  sound.play('point')
+}
+if (!document.fullscreenEnabled) element('fullscreen').hidden = true
+element('fullscreen').onclick = async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen()
+    else await element('app').requestFullscreen()
+  } catch {
+    toast('Fullscreen isn’t available in this browser.')
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  element('fullscreen').setAttribute(
+    'aria-label',
+    document.fullscreenElement ? 'Exit fullscreen' : 'Enter fullscreen',
+  )
+})
+canvas.addEventListener('pointerdown', (event) => {
+  if (!event.isPrimary || event.button !== 0) return
+  event.preventDefault()
+  canvas.focus({ preventScroll: true })
+  if (mode === 'idle') start()
+  else if (mode === 'playing') doFlap()
+})
+document.addEventListener('keydown', (event) => {
+  if (event.repeat) return
+  if (event.code === 'Escape' || event.code === 'KeyP') {
+    event.preventDefault()
+    if (mode === 'paused') resume()
+    else pause()
+    return
+  }
+  if (event.code !== 'Space' && event.code !== 'ArrowUp') return
+  if ((event.target as HTMLElement).closest('button, a, input')) return
+  event.preventDefault()
+  if (mode === 'idle' || mode === 'over') start()
+  else if (mode === 'playing') doFlap()
+  else if (mode === 'paused') resume()
+})
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pause()
+  lastFrame = 0
+})
+window.addEventListener('blur', pause)
