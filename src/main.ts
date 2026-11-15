@@ -1,0 +1,6 @@
+import '@fontsource-variable/dm-sans'
+import '@fontsource-variable/fraunces'
+import './style.css'
+import { createFlight, flap, step, STEP, type Flight } from './game/physics'
+import { render, type Scene } from './game/render'
+import { Sound } from './game/sound'
