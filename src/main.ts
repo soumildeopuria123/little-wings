@@ -20,3 +20,20 @@ function icon(name: keyof typeof icons) {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]}</svg>`
 }
 function element<T extends HTMLElement>(id: string) {
+  return document.getElementById(id)! as T
+}
+function readLocal(key: string) {
+  try {
+    return localStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+function writeLocal(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value)
+  } catch {
+    /* Private mode still plays. */
+  }
+}
+document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
