@@ -37,3 +37,33 @@ function writeLocal(key: string, value: string) {
   }
 }
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+  <header class="header">
+    <a class="brand" href="./" aria-label="Little wings home"><img src="favicon.svg" width="36" height="36" alt=""/><span>Little wings</span></a>
+  </header>
+  <main class="game-shell">
+    <section id="stage" class="stage" aria-label="Flappy Bird">
+      <canvas id="game" tabindex="0" aria-label="Flappy Bird. Space, arrow up, or tap to flap. Escape to pause."></canvas>
+      <div id="hud" class="hud" hidden><span id="score" class="score">0</span><button id="pause" class="stage-button" aria-label="Pause game">${icon('pause')}</button></div>
+      <div id="start-screen" class="start-screen">
+        <h1>Flappy Bird<span class="title-dot">.</span></h1>
+        <div class="start-actions"><button id="start" class="primary">Let’s fly ${icon('arrow')}</button><span class="key-hint"><kbd>Space</kbd><span>or tap to fly</span></span></div>
+      </div>
+      <div id="result-screen" class="scrim" hidden>
+        <div class="result-card"><span id="result-eyebrow" class="eyebrow">Nice flight</span><h2 id="result-score">0</h2>
+          <div class="result-best">${icon('trophy')}<span>Best <strong id="result-best">0</strong></span></div>
+          <button id="again" class="primary">Fly again ${icon('arrow')}</button>
+        </div>
+      </div>
+      <div id="pause-screen" class="scrim" hidden><div class="pause-card"><h2>Paused</h2><button id="resume" class="primary">Keep flying ${icon('play')}</button></div></div>
+      <div id="countdown" class="countdown" hidden aria-live="polite"></div>
+      <div id="toast" class="toast" role="status" hidden></div>
+    </section>
+    <footer class="footer"><span class="best">${icon('trophy')}<span>Best <strong id="best">0</strong></span></span>
+      
+      <div class="utilities"><button id="sound" class="icon-button" aria-label="Turn sound on" aria-pressed="false">${icon('mute')}</button><button id="fullscreen" class="icon-button" aria-label="Enter fullscreen">${icon('expand')}</button></div>
+    </footer>
+  </main>
+  <div id="announcement" class="sr-only" aria-live="polite"></div>
+`
+
+const canvas = element<HTMLCanvasElement>('game'),
