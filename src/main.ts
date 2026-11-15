@@ -95,3 +95,6 @@ let milestone: { score: number; age: number } | null = null
 const celebrated = new Set<number>()
 let toastTimer = 0
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
+sound.enabled = readLocal('little-wings-sound') === 'on'
+element('best').textContent = String(best)
+function toast(message: string) {
