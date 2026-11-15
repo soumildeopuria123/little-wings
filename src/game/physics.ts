@@ -100,3 +100,39 @@ export function step(flight: Flight): void {
 }
 
 export function verifyReplay(
+  seed: number,
+  ticks: unknown,
+  inputs: unknown,
+): { score: number; ticks: number } | null {
+  if (
+    !Number.isInteger(ticks) ||
+    (ticks as number) < 1 ||
+    (ticks as number) > MAX_TICKS ||
+    !Array.isArray(inputs) ||
+    inputs.length > 4800
+  )
+    return null
+  let previous = -MIN_FLAP_TICKS
+  for (const input of inputs) {
+    if (
+      !Number.isInteger(input) ||
+      input < 0 ||
+      input >= (ticks as number) ||
+      input - previous < MIN_FLAP_TICKS
+    )
+      return null
+    previous = input
+  }
+  const flight = createFlight(seed)
+  let index = 0
+  while (flight.tick < (ticks as number) && flight.alive) {
+    if (inputs[index] === flight.tick) {
+      flap(flight)
+      index++
+    }
+    step(flight)
+  }
+  if (flight.alive || flight.tick !== ticks || index !== inputs.length)
+    return null
+  return { score: flight.score, ticks: flight.tick }
+}
