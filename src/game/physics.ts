@@ -54,3 +54,11 @@ function addPipe(flight: Flight) {
 }
 
 export function flap(flight: Flight): boolean {
+  if (!flight.alive || flight.tick - flight.lastFlap < MIN_FLAP_TICKS)
+    return false
+  flight.velocity = -346
+  flight.lastFlap = flight.tick
+  return true
+}
+
+export function step(flight: Flight): void {
