@@ -121,3 +121,15 @@ function isMilestone(score: number) {
 }
 
 function resize() {
+  const bounds = stage.getBoundingClientRect(),
+    dpr = Math.min(devicePixelRatio || 1, 2)
+  width = bounds.width
+  height = bounds.height
+  canvas.width = Math.round(width * dpr)
+  canvas.height = Math.round(height * dpr)
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+}
+new ResizeObserver(resize).observe(stage)
+resize()
+
+function start() {
