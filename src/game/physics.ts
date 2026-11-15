@@ -62,3 +62,41 @@ export function flap(flight: Flight): boolean {
 }
 
 export function step(flight: Flight): void {
+  if (!flight.alive) return
+  flight.tick++
+  flight.velocity = Math.min(650, flight.velocity + 1040 * STEP)
+  flight.y += flight.velocity * STEP
+  flight.distance += (174 + Math.min(28, flight.score * 0.7)) * STEP
+  if (
+    flight.y - RADIUS < 0 ||
+    flight.y + RADIUS >= FLOOR ||
+    flight.tick >= MAX_TICKS
+  ) {
+    flight.alive = false
+    return
+  }
+  for (const pipe of flight.pipes) {
+    const x = pipe.x - flight.distance
+    // Circle versus each pipe rectangle, including its slightly wider rim.
+    const dx = Math.max(Math.abs(x) - PIPE_WIDTH / 2, 0)
+    const top = pipe.center - pipe.gap / 2
+    const bottom = pipe.center + pipe.gap / 2
+    if (
+      dx * dx + Math.max(flight.y - top, 0) ** 2 < RADIUS ** 2 ||
+      dx * dx + Math.max(bottom - flight.y, 0) ** 2 < RADIUS ** 2
+    ) {
+      flight.alive = false
+      return
+    }
+    if (!pipe.passed && x + PIPE_WIDTH / 2 < -RADIUS) {
+      pipe.passed = true
+      flight.score++
+    }
+  }
+  if (flight.pipes[0].x < flight.distance - 700) {
+    flight.pipes.shift()
+    addPipe(flight)
+  }
+}
+
+export function verifyReplay(
