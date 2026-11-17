@@ -1,4 +1,4 @@
-# Flappy Bird
+# Little Wings
 
 An illustrated, single-player arcade game. The game is branded **Little wings**
 with locally bundled Fraunces and DM Sans fonts, a coral bird, sculpted pipes,
