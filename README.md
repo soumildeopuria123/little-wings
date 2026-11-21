@@ -1,7 +1,7 @@
 # Little Wings
 
 
-https://soumildeopuria123.github.io/little-wings/
+Try it: https://soumildeopuria123.github.io/little-wings/
 
 
 An illustrated, single-player arcade game. The game is branded **Little wings**
